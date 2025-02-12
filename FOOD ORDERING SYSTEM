@@ -1,0 +1,80 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX_FOODS 10
+
+// Structure to store food details
+typedef struct {
+    int food_id;
+    char name[50];
+    float price;
+} FoodItem;
+
+// Function prototypes
+void displayMenu(FoodItem foods[], int size);
+void orderFood(FoodItem foods[], int size);
+void calculateTotal(int foodOrders[], FoodItem foods[], int size);
+
+int main() {
+    // List of food items
+    FoodItem foods[MAX_FOODS] = {
+        {1, "Pizza", 10.5},
+        {2, "Burger", 5.5},
+        {3, "Pasta", 7.0},
+        {4, "Salad", 4.0},
+        {5, "Sandwich", 3.5},
+        {6, "Ice Cream", 2.5},
+        {7, "Soda", 1.5},
+        {8, "Coffee", 2.0},
+        {9, "Cake", 3.0},
+        {10, "Fries", 3.0}
+    };
+    
+    int foodOrders[MAX_FOODS] = {0}; // To keep track of ordered quantities
+    int choice;
+    
+    printf("Welcome to the Food Ordering System!\n");
+
+    // Display menu and take orders
+    do {
+        displayMenu(foods, MAX_FOODS);
+        printf("\nEnter your choice (1-%d), or 0 to exit: ", MAX_FOODS);
+        scanf("%d", &choice);
+        
+        if (choice > 0 && choice <= MAX_FOODS) {
+            int quantity;
+            printf("Enter quantity for %s: ", foods[choice-1].name);
+            scanf("%d", &quantity);
+            foodOrders[choice-1] += quantity;
+        } else if (choice != 0) {
+            printf("Invalid choice, please try again.\n");
+        }
+    } while (choice != 0);
+
+    // Calculate and display total cost
+    calculateTotal(foodOrders, foods, MAX_FOODS);
+    
+    return 0;
+}
+
+// Function to display the food menu
+void displayMenu(FoodItem foods[], int size) {
+    printf("\nFood Menu:\n");
+    for (int i = 0; i < size; i++) {
+        printf("%d. %s - $%.2f\n", foods[i].food_id, foods[i].name, foods[i].price);
+    }
+}
+
+// Function to calculate and display total order cost
+void calculateTotal(int foodOrders[], FoodItem foods[], int size) {
+    float total = 0;
+    printf("\nYour Order Summary:\n");
+    for (int i = 0; i < size; i++) {
+        if (foodOrders[i] > 0) {
+            float cost = foodOrders[i] * foods[i].price;
+            printf("%d x %s - $%.2f (Total: $%.2f)\n", foodOrders[i], foods[i].name, foods[i].price, cost);
+            total += cost;
+        }
+    }
+    printf("\nTotal mount: $%.2f\n", total); 
+     } 
